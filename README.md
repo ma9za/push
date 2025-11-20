@@ -1,81 +1,100 @@
-🚀 PushPro: Self-Hosted Web Push & PWA Library
-A lightweight, plug-and-play PHP library to transform any static or dynamic website into a Progressive Web App (PWA) with full Push Notification capabilities.
-No monthly fees. No external services. 100% Data Ownership.
-✨ Features
-📱 Instant PWA: Converts your site into an installable app (Android & iOS).
-🔔 Push Notifications: Send notifications to all users or specific devices (iOS/Android).
-📊 Dashboard: Built-in Admin Panel to manage subscribers and send campaigns.
-🛡️ Self-Hosted: Runs entirely on your server (SQLite database).
-⚡ Smart Caching: Offline support and fast loading speeds.
-🎨 Modern UI: Dark mode, glassmorphism design, and responsive widgets.
-📂 Repository Structure
-Your project should look like this on your server:
-/public_html              <-- Your Website Root
-│
-├── index.html            # Your main website file
-├── manifest.json         # App metadata (Name, Icons)
-├── sw.js                 # Service Worker (Must be in root)
-├── icon.png              # App Icon (512x512 recommended)
-│
-└── push/                 # The PushPro Library
-    ├── admin.php         # Admin Dashboard
-    ├── api.php           # API Endpoint
-    ├── client.js         # Frontend Integration Script
-    ├── config.php        # Database Configuration
-    ├── install.php       # Installer Script
-    ├── composer.json     # Dependencies
-    └── vendor/           # (Generated via composer install)
+# PushPro: مكتبة ذاتية الاستضافة لتطبيقات الويب التقدمية (PWA) وإشعارات الويب
 
+مكتبة خفيفة الوزن تركز على الخصوصية لتحويل أي موقع ويب إلى تطبيق ويب تقدمي (PWA) مع إمكانيات إشعارات دفع كاملة. تعمل بالكامل على الخادم الخاص بك باستخدام PHP و SQLite.
 
-🛠️ Installation Guide
-Step 1: Deploy Files
-Upload the push folder to your website's root directory.
-Upload sw.js, manifest.json, and icon.png to the root directory (next to your index.html or index.php).
-Step 2: Install Dependencies
-(Skip this if you uploaded the vendor folder manually) Navigate to the push directory in your terminal and run:
+## الميزات
+
+*   **بدون تبعيات:** لا تتطلب خدمات خارجية مثل OneSignal أو Firebase.
+*   **ملكية كاملة:** أنت تملك بيانات المشتركين الخاصة بك (المخزنة محليًا في SQLite).
+*   **تطبيق ويب تقدمي فوري:** يضيف وظيفة "تثبيت التطبيق" إلى موقعك.
+*   **لوحة تحكم للمسؤول:** واجهة عصرية بوضع داكن لإدارة الحملات.
+*   **تخزين ذكي مؤقت:** استراتيجيات "الشبكة أولاً" للدعم في حالة عدم الاتصال بالإنترنت.
+
+## المتطلبات الأساسية
+
+*   PHP 8.1 أو أعلى
+*   Composer مثبت
+*   شهادة SSL (بروتوكول HTTPS مطلوب لـ Service Workers)
+*   تمكين إضافة SQLite
+
+## التثبيت
+
+### 1. إعداد الملفات
+
+قم برفع مجلد `push` إلى الخادم الخاص بك. بعد ذلك، انقل ملفات `sw.js` و `manifest.json` و `icon.png` إلى المجلد الجذر لموقعك (بجانب `index.html` أو `index.php`).
+
+يجب أن يبدو الهيكل الخاص بك كما يلي:
+
+```
+/public_html
+├── index.html
+├── sw.js
+├── manifest.json
+├── icon.png
+└── push/
+    ├── admin.php
+    ├── api.php
+    ├── composer.json
+    └── ...
+```
+
+### 2. تثبيت التبعيات
+
+انتقل إلى مجلد `push` عبر الطرفية (terminal) وقم بتشغيل Composer لتثبيت مكتبات التشفير المطلوبة.
+
+```bash
 cd push
 composer install
+```
 
+### 3. تعيين الأذونات
 
-Step 3: Server Permissions
-Ensure the server has write permissions to the push folder to create the database:
-chmod -R 755 push
+تأكد من أن الخادم يمكنه الكتابة في مجلد `push` لإنشاء قاعدة البيانات.
 
+```bash
+chmod 755 push
+```
 
-Step 4: Run Installer
-Open your browser and navigate to: https://yoursite.com/push/install.php
-Create an Admin Username and Password.
-Click Install.
-The system will generate VAPID Keys and create the database.sqlite file automatically.
-🔗 Integration (Frontend)
-To connect your website to the PushPro system, simply add the following lines to the <head> section of your index.html (or header template):
-<!-- PWA Manifest -->
+### 4. تهيئة النظام
+
+افتح متصفحك وقم بزيارة صفحة التثبيت لإنشاء حساب المسؤول الخاص بك وتوليد مفاتيح VAPID.
+
+`https://your-domain.com/push/install.php`
+
+## التكامل
+
+أضف الأسطر التالية إلى قسم `<head>` في ملف موقعك الرئيسي (على سبيل المثال، `index.html` ).
+
+```html
 <link rel="manifest" href="/manifest.json">
-
-<!-- PushPro Client Script -->
 <script src="/push/client.js" defer></script>
-
-<!-- Service Worker Registration -->
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('SW Registered!', reg))
-            .catch(err => console.error('SW Failed:', err));
+        navigator.serviceWorker.register('/sw.js');
     }
 </script>
+```
 
+## الإعدادات
 
-⚙️ Configuration
-manifest.json
-Edit this file to change your app's name and theme colors:
+### هوية التطبيق
+
+قم بتحرير ملف `manifest.json` في المجلد الجذر لتغيير اسم التطبيق ولون المظهر.
+
+```json
 {
-  "name": "My Awesome App",
-  "short_name": "MyApp",
-  "start_url": "/",
+  "name": "My App",
+  "short_name": "App",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
     {
       "src": "/icon.png",
       "sizes": "512x512",
@@ -83,26 +102,30 @@ Edit this file to change your app's name and theme colors:
     }
   ]
 }
+```
 
+### تحديث المحتوى
 
-sw.js (Cache Updates)
-To force an update for your users (e.g., after changing CSS or JS), update the version number at the top of sw.js:
-const CACHE_VERSION = 'v1.1'; // Change to v1.2 to force update
+لفرض تحديث لجميع المستخدمين (إبطال ذاكرة التخزين المؤقت)، قم بتغيير الثابت `CACHE_VERSION` في الجزء العلوي من ملف `sw.js`.
 
+```javascript
+const CACHE_VERSION = 'v1.1';
+```
 
-🚀 How to Use
-Visit your website: You should see the "Install App" prompt or the Notification permission modal.
-Subscribe: Click "Allow" to subscribe to notifications.
-Send Notifications:
-Go to https://yoursite.com/push/admin.php
-Login with your credentials.
-Write a title, message, and optional URL/Image.
-Type "SEND" to confirm and blast the notification!
-⚠️ Requirements
-SSL Certificate (HTTPS): Required for Service Workers and Push API.
-PHP 8.1+: Required for the backend logic.
-SQLite Extension: Enabled in PHP (standard on most hosts).
-🤝 Contributing
-Feel free to fork this repository and submit pull requests.
-Developed with ❤️
+## الاستخدام
 
+*   **الاشتراك:** قم بزيارة موقعك. ستظهر مطالبة الاشتراك تلقائيًا.
+*   **إرسال الإشعارات:**
+    *   اذهب إلى `https://your-domain.com/push/`
+    *   سجل الدخول باستخدام بيانات الاعتماد الخاصة بك.
+    *   اكتب رسالتك.
+    *   اكتب `SEND` للتأكيد والإرسال.
+
+## استكشاف الأخطاء وإصلاحها
+
+*   **الإشعار لا يظهر؟**
+    تأكد من أنك تستخدم HTTPS. لا يعمل Service Workers على HTTP.
+*   **خطأ في قاعدة البيانات؟**
+    تحقق من أذونات المجلد. يجب أن يكون مجلد `push` قابلاً للكتابة بواسطة عملية PHP.
+*   **شاشة بيضاء؟**
+    تأكد من أنك قمت بتشغيل `composer install` داخل مجلد `push`.
