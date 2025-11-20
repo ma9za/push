@@ -1,29 +1,29 @@
-# PushPro: مكتبة ذاتية الاستضافة لتطبيقات الويب التقدمية (PWA) وإشعارات الويب
+# PushPro: Self-Hosted PWA & Web Push Library
 
-مكتبة خفيفة الوزن تركز على الخصوصية لتحويل أي موقع ويب إلى تطبيق ويب تقدمي (PWA) مع إمكانيات إشعارات دفع كاملة. تعمل بالكامل على الخادم الخاص بك باستخدام PHP و SQLite.
+A privacy-focused, lightweight library to transform any website into a Progressive Web App with full push notification capabilities. Runs entirely on your own server using PHP and SQLite.
 
-## الميزات
+## Features
 
-*   **بدون تبعيات:** لا تتطلب خدمات خارجية مثل OneSignal أو Firebase.
-*   **ملكية كاملة:** أنت تملك بيانات المشتركين الخاصة بك (المخزنة محليًا في SQLite).
-*   **تطبيق ويب تقدمي فوري:** يضيف وظيفة "تثبيت التطبيق" إلى موقعك.
-*   **لوحة تحكم للمسؤول:** واجهة عصرية بوضع داكن لإدارة الحملات.
-*   **تخزين ذكي مؤقت:** استراتيجيات "الشبكة أولاً" للدعم في حالة عدم الاتصال بالإنترنت.
+*   **Zero Dependencies:** No external services like OneSignal or Firebase required.
+*   **Full Ownership:** You own your subscriber data (stored locally in SQLite).
+*   **Instant PWA:** Adds "Install App" functionality to your site.
+*   **Admin Dashboard:** Modern dark-mode interface to manage campaigns.
+*   **Smart Caching:** Network-first strategies for offline support.
 
-## المتطلبات الأساسية
+## Prerequisites
 
-*   PHP 8.1 أو أعلى
-*   Composer مثبت
-*   شهادة SSL (بروتوكول HTTPS مطلوب لـ Service Workers)
-*   تمكين إضافة SQLite
+*   PHP 8.1 or higher
+*   Composer installed
+*   SSL Certificate (HTTPS is required for Service Workers)
+*   SQLite extension enabled
 
-## التثبيت
+## Installation
 
-### 1. إعداد الملفات
+### 1. Setup Files
 
-قم برفع مجلد `push` إلى الخادم الخاص بك. بعد ذلك، انقل ملفات `sw.js` و `manifest.json` و `icon.png` إلى المجلد الجذر لموقعك (بجانب `index.html` أو `index.php`).
+Upload the `push` folder to your server. Then, move the `sw.js`, `manifest.json`, and `icon.png` files to your website's root directory (next to your `index.html` or `index.php`).
 
-يجب أن يبدو الهيكل الخاص بك كما يلي:
+Your structure must look like this:
 
 ```
 /public_html
@@ -38,32 +38,32 @@
     └── ...
 ```
 
-### 2. تثبيت التبعيات
+### 2. Install Dependencies
 
-انتقل إلى مجلد `push` عبر الطرفية (terminal) وقم بتشغيل Composer لتثبيت مكتبات التشفير المطلوبة.
+Navigate to the `push` directory via terminal and run Composer to install the required encryption libraries.
 
 ```bash
 cd push
 composer install
 ```
 
-### 3. تعيين الأذونات
+### 3. Set Permissions
 
-تأكد من أن الخادم يمكنه الكتابة في مجلد `push` لإنشاء قاعدة البيانات.
+Ensure the server can write to the `push` directory to create the database.
 
 ```bash
 chmod 755 push
 ```
 
-### 4. تهيئة النظام
+### 4. Initialize System
 
-افتح متصفحك وقم بزيارة صفحة التثبيت لإنشاء حساب المسؤول الخاص بك وتوليد مفاتيح VAPID.
+Open your browser and visit the installation page to create your admin account and generate VAPID keys.
 
 `https://your-domain.com/push/install.php`
 
-## التكامل
+## Integration
 
-أضف الأسطر التالية إلى قسم `<head>` في ملف موقعك الرئيسي (على سبيل المثال، `index.html` ).
+Add the following lines to the `<head>` section of your main website file (e.g., `index.html`).
 
 ```html
 <link rel="manifest" href="/manifest.json">
@@ -75,11 +75,11 @@ chmod 755 push
 </script>
 ```
 
-## الإعدادات
+## Configuration
 
-### هوية التطبيق
+### App Identity
 
-قم بتحرير ملف `manifest.json` في المجلد الجذر لتغيير اسم التطبيق ولون المظهر.
+Edit `manifest.json` in your root directory to change the app name and theme color.
 
 ```json
 {
@@ -104,28 +104,28 @@ chmod 755 push
 }
 ```
 
-### تحديث المحتوى
+### Updating Content
 
-لفرض تحديث لجميع المستخدمين (إبطال ذاكرة التخزين المؤقت)، قم بتغيير الثابت `CACHE_VERSION` في الجزء العلوي من ملف `sw.js`.
+To force an update for all users (cache busting), change the `CACHE_VERSION` constant at the top of `sw.js`.
 
 ```javascript
 const CACHE_VERSION = 'v1.1';
 ```
 
-## الاستخدام
+## Usage
 
-*   **الاشتراك:** قم بزيارة موقعك. ستظهر مطالبة الاشتراك تلقائيًا.
-*   **إرسال الإشعارات:**
-    *   اذهب إلى `https://your-domain.com/push/`
-    *   سجل الدخول باستخدام بيانات الاعتماد الخاصة بك.
-    *   اكتب رسالتك.
-    *   اكتب `SEND` للتأكيد والإرسال.
+*   **Subscribe:** Visit your website. The subscription prompt will appear automatically.
+*   **Send Notifications:**
+    *   Go to `https://your-domain.com/push/`
+    *   Log in with your credentials.
+    *   Compose your message.
+    *   Type `SEND` to confirm and dispatch.
 
-## استكشاف الأخطاء وإصلاحها
+## Troubleshooting
 
-*   **الإشعار لا يظهر؟**
-    تأكد من أنك تستخدم HTTPS. لا يعمل Service Workers على HTTP.
-*   **خطأ في قاعدة البيانات؟**
-    تحقق من أذونات المجلد. يجب أن يكون مجلد `push` قابلاً للكتابة بواسطة عملية PHP.
-*   **شاشة بيضاء؟**
-    تأكد من أنك قمت بتشغيل `composer install` داخل مجلد `push`.
+*   **Notification not appearing?**
+    Ensure you are using HTTPS. Service workers do not function on HTTP.
+*   **Database error?**
+    Check directory permissions. The `push` folder must be writable by the PHP process.
+*   **White screen?**
+    Make sure you ran `composer install` inside the `push` folder.
