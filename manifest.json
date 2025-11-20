@@ -1,18 +1,15 @@
 {
-  "name": "أسرار تقنية",
-  "short_name": "turki app",
-  "description": "المرجع التقني الأول للمبرمجين",
-  "start_url": "/home.html",
+  "name": "My App",
+  "short_name": "App",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "/icon.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "/icon.png",
@@ -21,5 +18,3 @@
     }
   ]
 }
-
-
